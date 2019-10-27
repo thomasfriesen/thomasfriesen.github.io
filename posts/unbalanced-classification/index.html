@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Imbalanced Classification - Statistics, R, Bayes and other stuff</title>
+  <meta name="description" content="Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable is now discrete. The most used case is a binary classification but a multi-case classification is possible too. A possible problem in classification is the case of an imbalanced dataset, where the number of cases are not equally distributed. To counter this problem a number of sampling methods can be used.">
+  <meta name="author" content="Thomas"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Statistics, R, Bayes and other stuff",
+    
+    "url": "https:\/\/thomasfriesen.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/thomasfriesen.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/posts\/unbalanced-classification\/",
+          "name": "Imbalanced classification"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Thomas Friesen"
+  },
+  "headline": "Imbalanced Classification",
+  "description" : "Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable is now discrete. The most used case is a binary classification but a multi-case classification is possible too. A possible problem in classification is the case of an imbalanced dataset, where the number of cases are not equally distributed. To counter this problem a number of sampling methods can be used.",
+  "inLanguage" : "en",
+  "wordCount":  1506 ,
+  "datePublished" : "2019-01-20T00:00:00",
+  "dateModified" : "2019-01-20T00:00:00",
+  "image" : "https:\/\/thomasfriesen.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/thomasfriesen.github.io\/posts\/unbalanced-classification\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/thomasfriesen.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/thomasfriesen.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Imbalanced Classification" />
+<meta property="og:description" content="Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable is now discrete. The most used case is a binary classification but a multi-case classification is possible too. A possible problem in classification is the case of an imbalanced dataset, where the number of cases are not equally distributed. To counter this problem a number of sampling methods can be used.">
+<meta property="og:url" content="https://thomasfriesen.github.io/posts/unbalanced-classification/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Statistics, R, Bayes and other stuff" />
+
+  <meta name="twitter:title" content="Imbalanced Classification" />
+  <meta name="twitter:description" content="Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.58.3" />
+  <link rel="alternate" href="https://thomasfriesen.github.io/index.xml" type="application/rss+xml" title="Statistics, R, Bayes and other stuff"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://thomasfriesen.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/syntax.css" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/page/about">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Shiny-Apps" href="https://hanging.shinyapps.io/umfrageio/">Shiny-Apps</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Imbalanced Classification</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable is now discrete.
+The most used case is a binary classification but a multi-case classification is possible too. A possible problem in classification is the case of an imbalanced dataset, where the number of cases are not equally distributed. To counter this problem a number of sampling methods can be used. Down-sampling selects observations from the majority class, so that the number are equally to the minority case. In Up-Sampling this is reversed. <a href="http://rikunert.com/SMOTE_explained">SMOTE-Sampling</a> is a combination of up and down sampling where in addition synthetic observations are created. In this problem a random forest is used for classification and different sampling methods are applied and compared to each other.</p>
+
+<pre><code class="language-r">library(randomForest)
+library(caret)
+library(pROC)
+library(DMwR)
+library(doParallel)
+library(GGally)
+library(ggfortify)
+library(doParallel)
+wine_red=read.csv(&quot;winequality-red.csv&quot;,header=T,sep=&quot;;&quot;)
+wine_red$quality=factor(wine_red$quality,levels=c(3,4,5,6,7,8))
+</code></pre>
+
+<p>The classical wine dataset is used which can be dowloaded <a href="https://archive.ics.uci.edu/ml/datasets/wine+quality">here</a>. The dataset contains data about 1599 observations. Different variables describing the composition of the wine are given and a quality variable, which ranges from 3 to 8. The target is to predict the quality for each wine.</p>
+
+<pre><code class="language-r">wine_red$quality=as.numeric(paste(wine_red$quality))
+wine_red$binary=ifelse(wine_red$quality&lt;=6,&quot;G&quot;,&quot;B&quot;)
+table(wine_red$binary)/length(wine_red$binary)
+</code></pre>
+
+<pre><code>## 
+##         B         G 
+## 0.1357098 0.8642902
+</code></pre>
+
+<p>All observations with a quality value smaller or equal to 6 are classfied as G and otherwise B. This is done to reduce the problem of a multiclass-classification into a binary classification. The same methods for dealing with unbalanced datasets can be applied to multiclass cases as well. But for easiness a binary case is used.</p>
+
+<pre><code class="language-r">wine_red$binary=factor(wine_red$binary)
+set.seed(2508)
+trainingRow=createDataPartition(wine_red$binary,p=0.7,list=F)
+trainingSet=wine_red[trainingRow,]
+testSet=wine_red[-trainingRow,]
+</code></pre>
+
+<p>The dataset is partitioned into a trainings and a test set. This can be easily done with <em>createDataPartition</em> from the <a href="https://topepo.github.io/caret/index.html">caret</a> package. 70% of the dataset is used as a training set and the rest as a test set.</p>
+
+<pre><code class="language-r">tr_controll=trainControl(classProbs = T
+                         ,method=&quot;repeatedcv&quot;
+                         ,savePredictions=&quot;all&quot;
+                         ,summaryFunction=defaultSummary
+                         ,repeats=5
+                         ,allowParallel=T)
+
+cl &lt;- makePSOCKcluster(detectCores()-1)
+registerDoParallel(cl)
+model0=train(binary~fixed.acidity+volatile.acidity+citric.acid+residual.sugar+alcohol+sulphates
+             ,data=trainingSet,method=&quot;rf&quot;,metric=&quot;Kappa&quot;
+             ,maximize=F
+             ,tuneLength=10
+             ,ntree=1000
+             ,trControl=tr_controll)
+</code></pre>
+
+<pre><code>## note: only 5 unique complexity parameters in default grid. Truncating the grid to 5 .
+</code></pre>
+
+<pre><code class="language-r">stopCluster(cl)
+roc0=roc(testSet$binary,
+    predict(model0, testSet, type = &quot;prob&quot;)[,1],
+    levels = rev(levels(as.factor(testSet$binary))))
+</code></pre>
+
+<p><em>TrainControl</em> is one of the main function besides <em>train</em> and allows for different settings applied for the model estimation. In this case a reapeated cross-validation is used and all the predictions are saved. The number of repetitions is set to 5 and parallel computation is used. Repeated cross-validation is a very computing intense and parallel computing is needed for computing the models in an acceptable time limit.
+<em>DetectCores-1</em> is set this way to allow one core for the OS. The rest is used for the computation.
+The number of clusters are created with <em>makePSOCKcluster</em>.</p>
+
+<p>The main function of caret is <em>train</em>. The <em>method</em> argument specifies, which <a href="http://topepo.github.io/caret/train-models-by-tag.html">model</a> should be used. The <em>metric</em> argument is used for selecting the criterion for the optimal model.
+The Kappa, or Cohens <a href="https://stats.stackexchange.com/questions/82162/cohens-kappa-in-plain-english">Kappa</a>, is useful for classification in case of unbalanced datasets. Kappa takes into account the random chance. Accuracy is not very useful for classifying unbalanced dataset. Even a simple binary model where the number of cases is predicted by using just the base rate achieves a high accuracy.
+The <em>tuneLength</em> is the number of variables used at each split in a decision tree. The number of trees fitted for a random forest can be set by <em>ntree</em>.
+To stop the clusters from working once the compuation is done, <em>stopCluster</em> termiantes the clsuters.</p>
+
+<p>For classification a ROC-Curve is useful as a graphical tool for plotting the quality of a binary classification. On the x-axis the specifity is plotted and on the y-axis the sensitivity.
+A good model should have a ROC-Curve near the top left.</p>
+
+<pre><code class="language-r">Confusion_threshold=confusionMatrix(predict(model0,testSet),reference=testSet$binary)
+Confusion_threshold
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   B   G
+##          B  36  15
+##          G  29 399
+##                                           
+##                Accuracy : 0.9081          
+##                  95% CI : (0.8786, 0.9325)
+##     No Information Rate : 0.8643          
+##     P-Value [Acc &gt; NIR] : 0.002123        
+##                                           
+##                   Kappa : 0.5693          
+##  Mcnemar's Test P-Value : 0.050016        
+##                                           
+##             Sensitivity : 0.55385         
+##             Specificity : 0.96377         
+##          Pos Pred Value : 0.70588         
+##          Neg Pred Value : 0.93224         
+##              Prevalence : 0.13570         
+##          Detection Rate : 0.07516         
+##    Detection Prevalence : 0.10647         
+##       Balanced Accuracy : 0.75881         
+##                                           
+##        'Positive' Class : B               
+## 
+</code></pre>
+
+<p>The test set is now used to see assess the perfomance of the model. All the information given below are derived from the confusion matrix.
+The positive class is &ldquo;B&rdquo;. The sensitiviy is here 0.5538 (36/(36+29))
+The Kappa value is between 0 and 1, where 1 is a perfect model while 0 is a useless model.</p>
+
+<pre><code class="language-r">tr_controll=trainControl(classProbs = T
+                         ,method=&quot;repeatedcv&quot;
+                         ,sampling=&quot;down&quot;
+                         ,savePredictions=&quot;all&quot;
+                         ,summaryFunction=defaultSummary
+                         ,repeats=5
+                         ,allowParallel=T)
+
+cl &lt;- makePSOCKcluster(detectCores()-1)
+registerDoParallel(cl)
+model_down=train(binary~fixed.acidity+volatile.acidity+citric.acid+residual.sugar+alcohol+sulphates
+             ,data=trainingSet,method=&quot;rf&quot;,metric=&quot;Kappa&quot;
+             ,maximize=F
+             ,tuneLength=10
+             ,ntree=1000
+             ,trControl=tr_controll)
+</code></pre>
+
+<pre><code>## note: only 5 unique complexity parameters in default grid. Truncating the grid to 5 .
+</code></pre>
+
+<pre><code class="language-r">stopCluster(cl)
+roc_down=roc(testSet$binary,
+         predict(model_down, testSet, type = &quot;prob&quot;)[,1],
+         levels = rev(levels(as.factor(testSet$binary))))
+</code></pre>
+
+<p>The only difference in model is the sampling. Down-Sampling is now used to calculate the model.</p>
+
+<pre><code class="language-r">Confusion_threshold_down=confusionMatrix(predict(model_down,testSet),reference=testSet$binary)
+Confusion_threshold_down
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   B   G
+##          B  51  84
+##          G  14 330
+##                                           
+##                Accuracy : 0.7954          
+##                  95% CI : (0.7565, 0.8307)
+##     No Information Rate : 0.8643          
+##     P-Value [Acc &gt; NIR] : 1               
+##                                           
+##                   Kappa : 0.4001          
+##  Mcnemar's Test P-Value : 3.168e-12       
+##                                           
+##             Sensitivity : 0.7846          
+##             Specificity : 0.7971          
+##          Pos Pred Value : 0.3778          
+##          Neg Pred Value : 0.9593          
+##              Prevalence : 0.1357          
+##          Detection Rate : 0.1065          
+##    Detection Prevalence : 0.2818          
+##       Balanced Accuracy : 0.7909          
+##                                           
+##        'Positive' Class : B               
+## 
+</code></pre>
+
+<p>The Kappa Value for down sampling is now much lower, the same holds for the accuracy.
+The sensitiviy is now higher as before. The models trades specifity for sensitivity. For all models this trade-off holds. The ROC-Curve for all the models estimated will be displayed later to compare the different models.</p>
+
+<pre><code class="language-r">tr_controll=trainControl(classProbs = T
+                         ,method=&quot;repeatedcv&quot;
+                         ,sampling=&quot;up&quot;
+                         ,savePredictions=&quot;all&quot;
+                         ,summaryFunction=defaultSummary
+                         ,repeats=5
+                         ,allowParallel=T)
+
+cl &lt;- makePSOCKcluster(detectCores()-1)
+registerDoParallel(cl)
+model_up=train(binary~fixed.acidity+volatile.acidity+citric.acid+residual.sugar+alcohol+sulphates
+                 ,data=trainingSet,method=&quot;rf&quot;,metric=&quot;Kappa&quot;
+                 ,maximize=F
+                 ,tuneLength=10
+                 ,ntree=1000
+                 ,trControl=tr_controll)
+</code></pre>
+
+<pre><code>## note: only 5 unique complexity parameters in default grid. Truncating the grid to 5 .
+</code></pre>
+
+<pre><code class="language-r">stopCluster(cl)
+roc_up=roc(testSet$binary,
+             predict(model_up, testSet, type = &quot;prob&quot;)[,1],
+             levels = rev(levels(as.factor(testSet$binary))))
+</code></pre>
+
+<pre><code class="language-r">Confusion_threshold_up=confusionMatrix(predict(model_up,testSet),reference=testSet$binary)
+Confusion_threshold_up
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   B   G
+##          B  41  19
+##          G  24 395
+##                                          
+##                Accuracy : 0.9102         
+##                  95% CI : (0.881, 0.9343)
+##     No Information Rate : 0.8643         
+##     P-Value [Acc &gt; NIR] : 0.001314       
+##                                          
+##                   Kappa : 0.6045         
+##  Mcnemar's Test P-Value : 0.541866       
+##                                          
+##             Sensitivity : 0.63077        
+##             Specificity : 0.95411        
+##          Pos Pred Value : 0.68333        
+##          Neg Pred Value : 0.94272        
+##              Prevalence : 0.13570        
+##          Detection Rate : 0.08559        
+##    Detection Prevalence : 0.12526        
+##       Balanced Accuracy : 0.79244        
+##                                          
+##        'Positive' Class : B              
+## 
+</code></pre>
+
+<pre><code class="language-r">tr_controll=trainControl(classProbs = T
+                         ,method=&quot;repeatedcv&quot;
+                         ,sampling=&quot;smote&quot;
+                         ,savePredictions=&quot;all&quot;
+                         ,summaryFunction=defaultSummary
+                         ,repeats=5
+                         ,allowParallel=T)
+
+cl &lt;- makePSOCKcluster(detectCores()-1)
+registerDoParallel(cl)
+model_smote=train(binary~fixed.acidity+volatile.acidity+citric.acid+residual.sugar+alcohol+sulphates
+             ,data=trainingSet,method=&quot;rf&quot;,metric=&quot;Kappa&quot;
+             ,maximize=F
+             ,tuneLength=10
+             ,ntree=1000
+             ,trControl=tr_controll)
+</code></pre>
+
+<pre><code>## note: only 5 unique complexity parameters in default grid. Truncating the grid to 5 .
+</code></pre>
+
+<pre><code class="language-r">stopCluster(cl)
+roc_smote=roc(testSet$binary,
+         predict(model_smote, testSet, type = &quot;prob&quot;)[,1],
+         levels = rev(levels(as.factor(testSet$binary))))
+</code></pre>
+
+<pre><code class="language-r">Confusion_threshold=confusionMatrix(predict(model_smote,testSet),reference=testSet$binary)
+Confusion_threshold
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   B   G
+##          B  46  47
+##          G  19 367
+##                                           
+##                Accuracy : 0.8622          
+##                  95% CI : (0.8281, 0.8918)
+##     No Information Rate : 0.8643          
+##     P-Value [Acc &gt; NIR] : 0.585362        
+##                                           
+##                   Kappa : 0.5029          
+##  Mcnemar's Test P-Value : 0.000889        
+##                                           
+##             Sensitivity : 0.70769         
+##             Specificity : 0.88647         
+##          Pos Pred Value : 0.49462         
+##          Neg Pred Value : 0.95078         
+##              Prevalence : 0.13570         
+##          Detection Rate : 0.09603         
+##    Detection Prevalence : 0.19415         
+##       Balanced Accuracy : 0.79708         
+##                                           
+##        'Positive' Class : B               
+## 
+</code></pre>
+
+<pre><code class="language-r">ggroc(list(Up=roc_up,Down=roc_down,Roc=roc0,SMOTE=roc_smote))+geom_line(data=data.frame(x=seq(1,0,by=-0.01),y=seq(0,1,by=0.01)),aes(x=x,y=y),inherit.aes=F)+
+  ggtitle(&quot;ROC-Curve with different Sampling Methods&quot;)
+</code></pre>
+
+<p><img src="/2019-01-20-unbalanced-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+The ROC-Curve for all models are plotted. The down sampling model seems to be on average worse than the other models compared. The SMOTE model is somewhat better than the Down model and similiar to the normal model (&ldquo;ROC&rdquo;) and the Up-sampling for higher values of specifity.</p>
+
+<pre><code class="language-r">model_list=resamples(list(Up=model_up,Smote=model_smote,Down=model_down,No=model0))
+model_diff=diff(model_list)
+dotplot(model_diff)
+</code></pre>
+
+<p><img src="/2019-01-20-unbalanced-classification_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+A repeated cross-validation was used for all the models which allows for calculating resampling results and statistics. Resampling allows us to calcualte standard erros and test statistics. The difference between the different models can than be calculated. In this graphic the difference including the confidence intervalls between all models is calculated. A Bonferroni adjustment is used for the multiple testings.
+The Up-Sampling methods is statistically better than SMOTE-Sampling.
+The Down-sampling is significantly worse compared to every other model. SMOTE Sampling only is better compared to Down-Sampling while it is worse compared to Up and no sampling.
+Up and the no sampling models are statistically not different.
+The results are somewhat similiar to other cases. Sampling methods enable a better-trade off between sensitivity and specifity, but there is no clear winner amongst the sampling methods. In this case the no sampling model is among the best, besides the Up-Sampling model. This may be due to the fact that the dataset is not extremely unbalanced.</p>
+
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://thomasfriesen.github.io/posts/2019-01-28-landsat-classification-using-k-means/" data-toggle="tooltip" data-placement="top" title="Landsat Classification using K-means">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://thomasfriesen.github.io/posts/2019-01-22-predicting-house-prices-in-taiwan-a-bayesian-approach/" data-toggle="tooltip" data-placement="top" title="Predicting House prices in Taiwan: A Bayesian approach">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/https://github.com/thomasfriesen" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Thomas
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.58.3</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://thomasfriesen.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://thomasfriesen.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

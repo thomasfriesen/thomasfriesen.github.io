@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tag2 on Statistics, R, Bayes and other stuff</title>
+    <link>https://thomasfriesen.github.io/tags/tag2/</link>
+    <description>Recent content in tag2 on Statistics, R, Bayes and other stuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 01 Jul 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://thomasfriesen.github.io/tags/tag2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Image segmentation using Python</title>
+      <link>https://thomasfriesen.github.io/posts/image-segmentation/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/image-segmentation/</guid>
+      <description>&lt;p&gt;Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN).
+There are different approaches for image segmentation.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

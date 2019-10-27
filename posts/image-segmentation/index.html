@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Image segmentation using Python - Statistics, R, Bayes and other stuff</title>
+  <meta name="description" content="Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN).
+There are different approaches for image segmentation.">
+  <meta name="author" content="Thomas"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Statistics, R, Bayes and other stuff",
+    
+    "url": "https:\/\/thomasfriesen.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/thomasfriesen.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/posts\/image-segmentation\/",
+          "name": "Image segmentation using python"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Thomas Friesen"
+  },
+  "headline": "Image segmentation using Python",
+  "description" : "Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN). There are different approaches for image segmentation.\n",
+  "inLanguage" : "en",
+  "wordCount":  1441 ,
+  "datePublished" : "2019-07-01T00:00:00",
+  "dateModified" : "2019-07-01T00:00:00",
+  "image" : "https:\/\/thomasfriesen.github.io\/",
+  "keywords" : [ "tag1, tag2, tag3" ],
+  "mainEntityOfPage" : "https:\/\/thomasfriesen.github.io\/posts\/image-segmentation\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/thomasfriesen.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/thomasfriesen.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Image segmentation using Python" />
+<meta property="og:description" content="Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN).
+There are different approaches for image segmentation.">
+<meta property="og:url" content="https://thomasfriesen.github.io/posts/image-segmentation/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Statistics, R, Bayes and other stuff" />
+
+  <meta name="twitter:title" content="Image segmentation using Python" />
+  <meta name="twitter:description" content="Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.58.3" />
+  <link rel="alternate" href="https://thomasfriesen.github.io/index.xml" type="application/rss+xml" title="Statistics, R, Bayes and other stuff"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://thomasfriesen.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/syntax.css" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/page/about">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Shiny-Apps" href="https://hanging.shinyapps.io/umfrageio/">Shiny-Apps</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Image segmentation using Python</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN).
+There are different approaches for image segmentation.</p>
+
+<p>In this post, the thresholding method, clustering based methods and edge based methods are presented. In addition there are the very popular and powerful CNN and Laplacian based methods.
+In image segmentation we try to divide an image into different regions which are of interest.  Pixel values which are close by and are similar are assigned to a group. If two neighbour pixels have divergent values, they are assigned to different categories.
+We first load the functions and packages needed. We mainly use <em>skimage</em>, which is used in python for image processing. In addition <em>numpy</em> and <em>sklearn</em> are loaded as well.</p>
+
+<pre><code class="language-python">import numpy as np
+from skimage import io
+from skimage import filters
+from skimage import color
+from scipy import ndimage
+from matplotlib.colors import LogNorm
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+</code></pre>
+
+<pre><code class="language-python">snow_pic=io.imread(&quot;2018.jpg&quot;)
+plt.figure()
+plt.imshow(snow_pic)
+</code></pre>
+
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f7b5b6c3110&gt;
+</code></pre>
+
+<p><img src="/img/output_3_1.png" alt="png" /></p>
+
+<pre><code class="language-python">snow_pic.shape
+</code></pre>
+
+<pre><code>(481, 321, 3)
+</code></pre>
+
+<p>The image used for image segmentation is from the <a href="https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/">Berkeley Segmentation Dataset</a>. The image is of size 481*321 and has three RGB channels.</p>
+
+<pre><code class="language-python">snow_gray=color.rgb2gray(snow_pic)
+
+</code></pre>
+
+<p>To ease the computation, the image is converted to a greyscale image and the greyscale image is used for further analysis.</p>
+
+<pre><code class="language-python">plt.figure()
+plt.imshow(snow_gray)
+</code></pre>
+
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f7b5b675c90&gt;
+</code></pre>
+
+<p><img src="/img/output_8_1.png" alt="png" /></p>
+
+<p><em>Imshow</em> displays the values in a heatmap style instead of a greyscale. By using the option cmap=&ldquo;gray&rdquo;, the image is shown as a greyscale image. We will use a image thresholding called Otsu&rsquo; method.</p>
+
+<pre><code class="language-python">val=filters.threshold_otsu(snow_gray)
+mask=snow_gray&lt;val
+plt.figure()
+plt.imshow(mask)
+
+</code></pre>
+
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f7b5b5da990&gt;
+</code></pre>
+
+<p><img src="/img/output_10_1.png" alt="png" /></p>
+
+<p>Otsu&rsquo;s Method is used for calculating an image-thresholding. Otsus&rsquo;s method assumes that an image consists of two classes of pixels, foreground and background pixel. It calculates the optimal value for minimizing the intra-class variance for both groups. If we just apply Otsu&rsquo;s filter, the image is divided into two segments. The filter is very blurry and it can not really distinguish between the snow shoes and the trees in the background. For this picture this method is clearly inadequate and we need something more sophisticated.</p>
+
+<h3 id="kmeans-for-image-segmentation">KMeans for image segmentation</h3>
+
+<p>Another widely used algorithm for image segmentation is kmeans. Kmeans is a clustering algorithm which assigns an observation to the nearest cluster center. After the assignment it calculates the new cluster center for the new observations. For the new cluster center the observation are again assigned to the nearest cluster center. This process is done iteratively until the solution does not change. The number of clusters need to be defined before, which is a disadvantage of KMeans. We will later try to find the optimal number of clusters. But in this example we set the number of clusters to 10.</p>
+
+<pre><code class="language-python">ll=KMeans(10).fit(snow_gray.reshape(-1,1))
+ll=ll.predict(snow_gray.reshape(-1,1))
+fig, (ax1,ax2)=plt.subplots(ncols=2,nrows=1,figsize=(10,8))
+ax1.imshow(snow_pic)
+ax1.set_title(&quot;Original&quot;)
+ax2.imshow(ll.reshape(481,321))
+ax2.set_title(&quot;Kmeans Solutions for 10 Cluster&quot;)
+</code></pre>
+
+<pre><code>Text(0.5, 1.0, 'Kmeans Solutions for 10 Cluster')
+</code></pre>
+
+<p><img src="/img/output_14_1.png" alt="png" /></p>
+
+<p>We use the <em>KMeans</em> function to calculate the solution for 10 clusters as an example. We use the <em>predict</em> method for obtaining the cluster solution and plot the correpsonding solution. The right image shows the cluster solution and we can see that the image is not well clustered. The snow shoes are somewhat visible but the forest in the background is hardly visible. As a way of deciding how many clusters we need we use the scree plot. In this example we calculate the KMeans solution for one to 30 clusters and extract the score.</p>
+
+<pre><code class="language-python">value=[]
+n=30
+for i in range(1,n):
+    kmeans=KMeans(i).fit(snow_gray.reshape(-1,1))
+    value.append(kmeans.score(snow_gray.reshape(-1,1)))
+
+</code></pre>
+
+<p>The idea of the scree plot is to calculate for different number of clusters the total within squares of sum. This is a measure of total dispersion and indicates how similiar these clusters are. The within sum of squares
+decreases with the number of clusters added but quite often we see a sharp bend in this plot, which indicates the total number of optimal clusters.</p>
+
+<pre><code class="language-python">plt.figure()
+plt.plot(range(1,30),value)
+
+</code></pre>
+
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x7f7b5b4fcc90&gt;]
+</code></pre>
+
+<p><img src="/img/output_18_1.png" alt="png" /></p>
+
+<p>In this plot we see a sharp bend for five clusters. The optimal number of clusters is right before the &ldquo;elbow&rdquo; bend. In this case the optimal solutions seems to be four clusters.</p>
+
+<pre><code class="language-python">ll=KMeans(4).fit(snow_gray.reshape(-1,1))
+ll=ll.predict(snow_gray.reshape(-1,1))
+fig, (ax1,ax2)=plt.subplots(ncols=2,nrows=1,figsize=(10,8))
+ax1.imshow(snow_pic)
+ax1.set_title(&quot;Original&quot;)
+ax2.imshow(ll.reshape(481,321))
+ax2.set_title(&quot;Kmeans Solutions for 4 Cluster&quot;)
+</code></pre>
+
+<pre><code>Text(0.5, 1.0, 'Kmeans Solutions for 4 Cluster')
+</code></pre>
+
+<p><img src="/img/output_20_1.png" alt="png" /></p>
+
+<p>The Kmeans solution for four cluster seems to provide a good image segmentation. The snow shoes are visible as well as the forest and the mountains in the background. The shadow in front of the shoes are also visble as a distinct group.</p>
+
+<h3 id="edge-detection-using-the-sobel-filter">Edge detection using the Sobel Filter</h3>
+
+<p>Edge detection is a useful method for detecting different regions in an image. The idea is to use the gradient of the greyscales. For discontinous values we can assume this is due to two different regions in the image. In the image above  the greyscale values between the shoes and the snow would show a drastic change of the greyscale values. On the other hand the greyscale values of the snow in the bottom of the image are similiar or exactly the same. We would therefore conclude that the pixels belong to the same region in the image.
+To detect these edges, filters and convolutions are used. The idea of convolution is to use a matrix of certain size for example 3*3 to discover horizontal,vertical or diagonal edges.</p>
+
+<p>\[\begin{bmatrix}-1 &amp; 0 &amp; 1 \\ -2 &amp; 0 &amp; 2 \\ -1 &amp; 0 &amp; 1 \\ \end{bmatrix}\]</p>
+
+<p>The matrix above is an example of a 3*3 convolution matrix. This convolution filter detects edges in x direction. The filter is placed on each pixel of the image, than the pixels around the center are calculated using the matrix. This calculated value is the new value and the filter is placed on the next pixel. This is done for the whole image.</p>
+
+<p>The Sobel Edge detector is using gradients for extracting corners. It calculates the derivatives for the x and y axis seperately. The <em>mode</em> parameter is needed in case the filter crosses a border. With <em>mode</em> set to <em>constant</em>, all values outside the border of the image have a constant value which can be set by the parameter <em>cval</em>. The default value is set to 0. With axis the direction of the filter can be set. In this case edges in horizontal and vertical directions are detected.</p>
+
+<pre><code class="language-python">dx=ndimage.sobel(snow_gray,axis=0,mode=&quot;constant&quot;)
+dy=ndimage.sobel(snow_gray,axis=1,mode=&quot;constant&quot;)
+fig, (ax1,ax2,ax3)=plt.subplots(nrows=1, ncols=3, figsize=(10, 6),
+                                    sharex=True, sharey=True)
+ax1.imshow(snow_pic)
+ax1.set_title(&quot;Original graphic&quot;)
+ax2.imshow(dx)
+ax2.set_title(&quot;Sobel-Filter Vertical&quot;)
+ax3.imshow(dy)
+ax3.set_title(&quot;Sobel-Filter Horizontal&quot;)
+</code></pre>
+
+<pre><code>Text(0.5, 1.0, 'Sobel-Filter Horizontal')
+</code></pre>
+
+<p><img src="/img/output_27_1.png" alt="png" /></p>
+
+<p>The original image and the Sobel filter for the x and y direction are plotted. We can also calculate the strength or magnitude and the orientation of the filter. The magnitude is defined in the following way:</p>
+
+<p>\[\sqrt{G_x^2+G_y^2}\]</p>
+
+<p>where \(G_x^2\) is the square of the gradient in x-direction. In this case these are discrete values. The magnitude can be approximated by using the absolute values for the x and y direction and than taking the sum.
+The orientation of an image is defined this way:</p>
+
+<p>\[tan^{-1}(\frac{G_X}{G_Y})\]</p>
+
+<pre><code class="language-python">orientation=np.arctan2(dx,dy)
+mag=np.sqrt(np.power(dx,2)+np.power(dy,2))
+</code></pre>
+
+<p>The first line calculates the orientation and the second line calculates the magnitude of the image, by using the formulas mentioned before.</p>
+
+<pre><code class="language-python">fig, ([ax1, ax4], [ax5,ax6]) = plt.subplots(nrows=2, ncols=2, figsize=(12, 8),
+                                    sharex=True, sharey=True)
+ax1.imshow(snow_pic)
+ax1.set_title(&quot;Original graphic&quot;)
+#ax2.imshow(dx)
+#ax2.set_title(&quot;Sobel-Filter Vertical&quot;)
+#ax3.imshow(dy)
+#ax3.set_title(&quot;Sobel-Filter Horizontal&quot;)
+ax4.imshow(dx.__abs__()+dy.__abs__())
+ax4.set_title(&quot;Sobel-Filter Approximate Sum&quot;)
+ax5.imshow(dx.__abs__()+dy.__abs__())
+ax5.set_title(&quot;Sobel-Filter Sum&quot;)
+ax6.imshow(orientation,cmap=&quot;gray&quot;)
+ax6.set_title(&quot;Sobel-Filter Orientation&quot;)
+
+</code></pre>
+
+<pre><code>Text(0.5, 1.0, 'Sobel-Filter Orientation')
+</code></pre>
+
+<p><img src="/img/output_34_1.png" alt="png" /></p>
+
+<p>In this graphic the original image, the  approximate sum, the exact sum and the orientation are plotted.
+The approximate and exact filter sum show the edges of the image and are very similiar. From those images we see the shapes of the snow shoes, the mountains in the background and the trees.
+The last image shows the orientation of image. The orientation shows the direction of the gradient changes, e.g. whether the edge is a horizontal, vertical or a diagonal.</p>
+
+<p>We can try to give a short summary for each method.
+Threshold methods are easy and fast to caculate and work very well when the target and the background have high contrasts. The disadvantage is that it is difficult to obtain accurate results for image segmentation problems where there is no significant gray scale difference.
+The K-Means clustering algorithm is fast and simple. But the disadvantage of K-means is that its clustering number k has no explicit selection criteria and is difficult to estimate.
+Sobel filter are very easy to estimate but are sensitive to noisy images.
+In this example the image used was of high quality and had no noise. For a blurry or noisy image the results would certainly differ more and other apporaches which use a smoothing operation like the Laplacian would be more useful.</p>
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://thomasfriesen.github.io//tags/tag1/">tag1</a>&nbsp;
+            
+              <a href="https://thomasfriesen.github.io//tags/tag2/">tag2</a>&nbsp;
+            
+              <a href="https://thomasfriesen.github.io//tags/tag3/">tag3</a>&nbsp;
+            
+          </div>
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://thomasfriesen.github.io/posts/2019-09-26-a-closer-look-at-the-german-federal-election-ii/" data-toggle="tooltip" data-placement="top" title="A closer look at the german federal election II">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://thomasfriesen.github.io/posts/19-10-2019-docker-for-rrocker/" data-toggle="tooltip" data-placement="top" title="Docker and R: Rocker">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/https://github.com/thomasfriesen" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Thomas
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.58.3</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://thomasfriesen.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://thomasfriesen.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

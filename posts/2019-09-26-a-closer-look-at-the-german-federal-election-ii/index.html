@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>A closer look at the german federal election II - Statistics, R, Bayes and other stuff</title>
+  <meta name="description" content="In the last example we took a look at the german constituencies and visualized those regions using a PCA. In this example we will cluster the constituencies using the principal component scores and try to find an ideal cluster solution. For clustering we will use hierarchical clustering. We first load the necessary packages for dealing with spatial data. The data used here has been prepared before the analysis by adding the principal component scores and by tidying the data up.">
+  <meta name="author" content="Thomas"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Statistics, R, Bayes and other stuff",
+    
+    "url": "https:\/\/thomasfriesen.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/thomasfriesen.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/posts\/2019-09-26-a-closer-look-at-the-german-federal-election-ii\/",
+          "name": "A closer look at the german federal election i i"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Thomas Friesen"
+  },
+  "headline": "A closer look at the german federal election II",
+  "description" : "In the last example we took a look at the german constituencies and visualized those regions using a PCA. In this example we will cluster the constituencies using the principal component scores and try to find an ideal cluster solution. For clustering we will use hierarchical clustering. We first load the necessary packages for dealing with spatial data. The data used here has been prepared before the analysis by adding the principal component scores and by tidying the data up.",
+  "inLanguage" : "en",
+  "wordCount":  1203 ,
+  "datePublished" : "2019-04-01T00:00:00",
+  "dateModified" : "2019-04-01T00:00:00",
+  "image" : "https:\/\/thomasfriesen.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/thomasfriesen.github.io\/posts\/2019-09-26-a-closer-look-at-the-german-federal-election-ii\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/thomasfriesen.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/thomasfriesen.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="A closer look at the german federal election II" />
+<meta property="og:description" content="In the last example we took a look at the german constituencies and visualized those regions using a PCA. In this example we will cluster the constituencies using the principal component scores and try to find an ideal cluster solution. For clustering we will use hierarchical clustering. We first load the necessary packages for dealing with spatial data. The data used here has been prepared before the analysis by adding the principal component scores and by tidying the data up.">
+<meta property="og:url" content="https://thomasfriesen.github.io/posts/2019-09-26-a-closer-look-at-the-german-federal-election-ii/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Statistics, R, Bayes and other stuff" />
+
+  <meta name="twitter:title" content="A closer look at the german federal election II" />
+  <meta name="twitter:description" content="In the last example we took a look at the german constituencies and visualized those regions using a PCA. In this example we will cluster the constituencies using the principal component scores and …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.58.3" />
+  <link rel="alternate" href="https://thomasfriesen.github.io/index.xml" type="application/rss+xml" title="Statistics, R, Bayes and other stuff"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://thomasfriesen.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/syntax.css" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/page/about">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Shiny-Apps" href="https://hanging.shinyapps.io/umfrageio/">Shiny-Apps</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>A closer look at the german federal election II</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>In the last example we took a look at the german constituencies and
+visualized those regions using a PCA. In this example we will cluster
+the constituencies using the principal component scores and try to find
+an ideal cluster solution. For clustering we will use hierarchical
+clustering. We first load the necessary packages for dealing with
+spatial data. The data used here has been prepared before the analysis
+by adding the principal component scores and by tidying the data up.</p>
+
+<pre><code>library(spatial)
+library(sf)
+library(rgdal)
+library(dplyr)
+library(mapview)
+library(reshape2)
+library(ggplot2)
+library(kableExtra)
+library(ggplot2)
+library(gridExtra)
+library(cluster)
+library(factoextra)
+</code></pre>
+
+<p>Hierarchical clustering is an agglomerative method and one of the older
+clustering algorithm. In hierarchical clustering all observation start
+in their own clsuter and are merged into new clusters until all
+observations are in one cluster at the final step. The results can be
+presented in a tree like structure. The hierarchical clustering
+algorithm can be subdivided into two approaches, agglomerative and
+divisive. Agglomerative strategies are starting from bottom where each
+observation is in its own group. One can calculate the pairwise distance
+between the observations and group those two observations together,
+which are nearest. Divisive methods on the other hand start from one
+group and then split the observations recursively. Hierarchical
+clustering has the nice property, that the number of different clusters
+<em>k</em> do not have to be specified in advance. One only needs to provide a
+distance measure for the observations. This fact will be used later for
+finding the optimal number of clusters.</p>
+
+<p>We cluster the data using hierarchical clustering and using Wards
+method. Wards criteria minimizes the variance and is therefore based on
+the method of sum of squared. The distance used in this case is
+euclidean.</p>
+
+<pre><code>daten_bezirk=read.csv(&quot;Statistik_daten_wahlkreis.csv&quot;)
+daten_bezirk=inner_join(as.data.frame(st_as_sf(shape1)),daten_bezirk,by=c(&quot;WKR_NAME&quot;))
+distanz=daten_bezirk[,59:63]
+distanz=dist(distanz,method=&quot;euclidean&quot;)
+clust=hclust(distanz,&quot;ward.D2&quot;)
+</code></pre>
+
+<p>We need to be careful in selecting which data to use for clustering.
+Using highly correlated data may lead to a distorted result. Those
+correlated variable will carry extra weight on the distance calculation
+than desired. We therefore use the first five principal component scores
+for calculating the distance matrix.</p>
+
+<p>To find the optimal number of clusters, we will use the silhouette plot,
+which is a method for measuring the compactness of the cluster solution.
+The silhouette plot is a method for comparing different clusters and is
+a graphical representation of how similar an object is to its own
+cluster. It is defined in the following way: <em>i</em> is the observation and
+<em>b</em>(<em>i</em>) and <em>a</em>(<em>i</em>) are the sillhoute values for observation <em>i</em> in
+clustter <em>a</em> and <em>b</em> respectively. The range of values for the
+silhouette value are bounded between -1 and 1. Values close to 1
+indicate that the dissimilarity between observations in cluster <em>a</em> are
+small relative to the dissimilarity to cluster <em>b</em>. <em>i</em> is therefore
+well clustered as the second best cluster <em>b</em> is not nearly as close as
+<em>a</em>. If <em>s</em>(<em>i</em>) is close to 0, then the average dissimilarity between
+cluster <em>a</em> and <em>b</em> are the same so observation <em>i</em> can be assigned to
+either one of the clusters, as it is not clear which cluster is better.
+<em>s</em>(<em>i</em>) close to -1 indicate that the average dissimilarity to the
+cluster <em>a</em> is much higher than the dissimilarity to <em>b</em>. Observation
+<em>i</em> should therefore be assigned to cluster <em>b</em>. The advantage of the
+silhouette plot is that it does not depend on the cluster algorithm, as
+would be the case for information criteria based methods.</p>
+
+<p>A silhouette value is computed for every observations and for each
+cluster solution we can calculate the overall average silhouette value.
+To find the optimal cluster size solution, we calculate the overall
+silhouette average width for each solution. We then plot the average
+silhouette size for each cluster solution from 2 to 290.</p>
+
+<pre><code>zahlen=data.frame(x=2:290)
+silhouetten=apply(zahlen,1,function(x) summary(silhouette(cutree(clust,x),distanz)))
+silhoutte_ergebnis=data.frame(x=zahlen,avg=sapply(silhouetten,function(x)x$avg.width))
+ggplot(silhoutte_ergebnis)+geom_point(aes(x=x,y=avg))+xlab(&quot;Cluster size from 2 to 290&quot;)+ylab(&quot;Average Silhouette Size&quot;)+ggtitle(&quot;The average silhoutte width for each cluster size&quot;)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-4-1.png" alt="" /></p>
+
+<p>According to the graphic, three cluster seem to be the optimum with a
+value of 0.3906, although four and two clusters are also high with their
+average silhouette values of 0.3758 and 0.3118.</p>
+
+<pre><code>head(silhoutte_ergebnis$avg)
+
+## [1] 0.3118969 0.3906218 0.3758216 0.2692193 0.2945250 0.2731856
+</code></pre>
+
+<p>To see which one is more appropriate, we plot the the cluster solutions
+from two to four and take a look at the corresponding silhouette values.</p>
+
+<pre><code>daten_bezirk$Cluster=silhouette(cutree(clust,3),distanz)[,1]
+daten_bezirk$Neighbour=silhouette(cutree(clust,3),distanz)[,2]
+daten_bezirk$Silhouette=silhouette(cutree(clust,3),distanz)[,3]
+p1=ggplot(daten_bezirk)+geom_sf(aes(fill=factor(Cluster)))+labs(fill=&quot;Cluster&quot;)+ggtitle(&quot;Cluster assignment for 3 clusters&quot;)
+p2=ggplot(daten_bezirk)+geom_sf(aes(fill=Silhouette))+ggtitle(&quot;Silhouette values for the regions&quot;)
+grid.arrange(p1,p2,nrow=1)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-6-1.png" alt="" /></p>
+
+<p>The three cluster solution divides germany into east germany, west
+germany and into big cities all over germany. In the right graphic the
+individual silhouette values for each constituencies are plotted. Values
+close to 1 indicate an optimal cluster assignment for this observation.
+In general cities and constituencies in the west have more negative
+values while the constituencies in the east have higher values.</p>
+
+<pre><code>sil1=silhouette(cutree(clust,3),distanz)
+fviz_silhouette(sil1,print.summary=F)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-7-1.png" alt="" />
+In addition we can plot the individual silhoutte values for each
+constituencies. The dashed line is the average silhouette value over all
+clusters. The constitutencies in east germany have high silhouette value
+and seem to be well matched. The more problematic observations are in
+cluster 2, which are the cities. A number of cities have negative
+values, which indicate a bad cluster assignment. We therefore take a
+look at the cluster solution for four groups.</p>
+
+<pre><code>daten_bezirk$Cluster=silhouette(cutree(clust,4),distanz)[,1]
+daten_bezirk$Neighbour=silhouette(cutree(clust,4),distanz)[,2]
+daten_bezirk$Silhouette=silhouette(cutree(clust,4),distanz)[,3]
+p1=ggplot(daten_bezirk)+geom_sf(aes(fill=factor(Cluster)))+labs(fill=&quot;Cluster&quot;)+ggtitle(&quot;Cluster assignment for 4 clusters&quot;)
+p2=ggplot(daten_bezirk)+geom_sf(aes(fill=Silhouette))+ggtitle(&quot;Silhouette values for the regions&quot;)
+grid.arrange(p1,p2,nrow=1)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-8-1.png" alt="" />
+Once we increase the number of clusters by one, we see a split in the
+city cluster. We have now a cluster for east geemany, west germany and
+two city clusters. In city cluster two these cities tend to be located
+in the south and west germany and are wealthier in general, as they
+include cities like München, Frankfurt, Hamburg. City cluster three
+includes cities in east germany and also cities in the west like
+Hannover.</p>
+
+<pre><code>sil1=silhouette(cutree(clust,4),distanz)
+fviz_silhouette(sil1,print.summary=F)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-9-1.png" alt="" />
+We here see negative silhouette values for the two city clusters 2 and
+3.</p>
+
+<pre><code>daten_bezirk$Cluster=silhouette(cutree(clust,2),distanz)[,1]
+daten_bezirk$Neighbour=silhouette(cutree(clust,2),distanz)[,2]
+daten_bezirk$Silhouette=silhouette(cutree(clust,2),distanz)[,3]
+p1=ggplot(daten_bezirk)+geom_sf(aes(fill=factor(Cluster)))+labs(fill=&quot;Cluster&quot;)+ggtitle(&quot;Cluster assignment for 2 clusters&quot;)
+p2=ggplot(daten_bezirk)+geom_sf(aes(fill=Silhouette))+ggtitle(&quot;Silhouette values for the regions&quot;)
+grid.arrange(p1,p2,nrow=1)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-10-1.png" alt="" />
+In the case for two clusters we have an urban cluster and a rural
+cluster. Constituencies in east germany and cities in the south and west
+have low silhouette values closer to zero or negative values.</p>
+
+<pre><code>sil1=silhouette(cutree(clust,2),distanz)
+#### braucht die Gruppenindikatoren und dann die Unähnlichkeitsmatrix
+fviz_silhouette(sil1,print.summary=F)
+</code></pre>
+
+<p><img src="/2019-09-26-a-closer-look-at-the-german-federal-election-ii_files/figure-markdown_strict/unnamed-chunk-11-1.png" alt="" /></p>
+
+<p>Comparing all those cluster solutions, the optimal number of clusters
+tend to be three or four. If we decide the optimal number just by the
+average silhouette width, three clusters solutions are optimal. In all
+those cluster solutions one could see the division into rural and urban
+constituencies and east and west germany. For the cluster solutoin with
+four groups, we can see an additional division for the urban
+constituencies. In addition some constituencies had negative silhouette
+values for all cluster solutions, which indicate in general a bad
+cluster assignment. This could be due to those observations being
+outliers in general, which would mean that they do not fit well into any
+real cluster solution. This would explain the fact, thtat some
+observations in the city cluster had negative silhouette values overall
+possible cluster solutions presented here. Other cluster like k-means
+could be used in addition to see how much the solutions are affected by
+the method used. k-means has the advantage to use an information based
+criteria like AIC for finding the optimal number of solutions.</p>
+
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://thomasfriesen.github.io/posts/2019-01-24-a-closer-look-at-the-german-federal-election-i/" data-toggle="tooltip" data-placement="top" title="A closer look at the german federal election I">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://thomasfriesen.github.io/posts/image-segmentation/" data-toggle="tooltip" data-placement="top" title="Image segmentation using Python">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/https://github.com/thomasfriesen" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Thomas
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.58.3</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://thomasfriesen.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://thomasfriesen.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

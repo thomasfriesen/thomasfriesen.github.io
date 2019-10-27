@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Docker and R: Rocker - Statistics, R, Bayes and other stuff</title>
+  <meta name="description" content="Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization software, docker containers are lighweight and fast to deploy. The reason for this is Docker relies on the kernel of the host instead of virtualizing the whole kernel.
+Docker is used in data science application because it allows to package the application and all its dependencies in one container.">
+  <meta name="author" content="Thomas"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Statistics, R, Bayes and other stuff",
+    
+    "url": "https:\/\/thomasfriesen.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/thomasfriesen.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/thomasfriesen.github.io\/posts\/19-10-2019-docker-for-rrocker\/",
+          "name": "Docker and r rocker"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Thomas Friesen"
+  },
+  "headline": "Docker and R: Rocker",
+  "description" : "Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization software, docker containers are lighweight and fast to deploy. The reason for this is Docker relies on the kernel of the host instead of virtualizing the whole kernel.\nDocker is used in data science application because it allows to package the application and all its dependencies in one container.",
+  "inLanguage" : "en",
+  "wordCount":  890 ,
+  "datePublished" : "2019-09-26T00:00:00",
+  "dateModified" : "2019-09-26T00:00:00",
+  "image" : "https:\/\/thomasfriesen.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/thomasfriesen.github.io\/posts\/19-10-2019-docker-for-rrocker\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/thomasfriesen.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/thomasfriesen.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Docker and R: Rocker" />
+<meta property="og:description" content="Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization software, docker containers are lighweight and fast to deploy. The reason for this is Docker relies on the kernel of the host instead of virtualizing the whole kernel.
+Docker is used in data science application because it allows to package the application and all its dependencies in one container.">
+<meta property="og:url" content="https://thomasfriesen.github.io/posts/19-10-2019-docker-for-rrocker/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Statistics, R, Bayes and other stuff" />
+
+  <meta name="twitter:title" content="Docker and R: Rocker" />
+  <meta name="twitter:description" content="Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.58.3" />
+  <link rel="alternate" href="https://thomasfriesen.github.io/index.xml" type="application/rss+xml" title="Statistics, R, Bayes and other stuff"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://thomasfriesen.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/syntax.css" /><link rel="stylesheet" href="https://thomasfriesen.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="About" href="/page/about">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Shiny-Apps" href="https://hanging.shinyapps.io/umfrageio/">Shiny-Apps</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Docker and R: Rocker</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization software, docker containers are lighweight and fast to deploy. The reason for this is Docker relies on the kernel of the host instead of virtualizing the whole kernel.</p>
+
+<p>Docker is used in data science application because it allows to package the application and all its dependencies in one container. This ensures that an  analysis created with R, which runs one computer, also runs on other computers, as all needed dependencies are packaged together.
+One can also create a Docker image with older version of R-Packages. This ensures reproducibility of the analysis and prevents a possible break down once a certain package has been updated.
+Another possibility is to offload computational intense tasks. This is especially handy for Bayesian models estimated with Stan, where a complicated model can take hours to estimate.</p>
+
+<p>Docker consists of three parts:
+* A docker file, which describes how a Docker image is created
+* A docker image, which gets built by using the docker file
+* A docker container, which is a running instance of a docker image</p>
+
+<p>In this post I will create a simple Dockerfile with the analysis and the data and build the corresponding Docker container.</p>
+
+<p>To install Docker on Manjaro we use pacman.</p>
+
+<pre><code class="language-bash">pacman -S docker
+
+</code></pre>
+
+<p>The most used Docker images for R are called Rocker. The image is based on stable Debian releases. A Dockerfile describes the base image used.
+In this case we use a geospatial image and install additionally some packages.</p>
+
+<pre><code>FROM rocker/geospatial:3.4.0
+
+RUN apt-get install libssl-dev  &amp;&amp;  apt-get install libxml2-dev
+
+RUN R -e &quot;options(repos=list(CRAN='http://mran.revolutionanalytics.com/snapshot/2019-03-15'))\
+     ; getOption('Ncpus',6L) ;install.packages(c('rstan','brms','dplyr'),dependencies=TRUE)&quot;
+
+COPY Bayes.R  R-Code/  data/  /home/rstudio/
+
+#CMD R -e &quot;source('/home/analysis/Bayes.R')&quot;
+
+</code></pre>
+
+<p><code>FROM</code> tells us which image we want to use for our Docker image. There exist special Docker images for R, called Rocker. As we need a Docker image with spatial packages already installed, we use the rocker/geospatial with 3.4 R-Version.
+<code>RUN</code> are bash commands, which are executed in the shell of the Docker image. The Rocker image is based on Debian. Therefore we need the <em>apt-get install</em> to install additional packages. Here we install two packages, libssl and libxml2, both in the developer version. This packages are needed for the shinystan package, which is a suggest requirement for the brms package.
+We can then install additional R Packages with the command <em>R</em> and the option <em>-e</em>.
+Afterwards we copy the data the we need into the home directoy of the rocker image, which is /home/rstudio in this case. The <code>COPY</code> command is similiar to the <em>cp</em> in the shell and copies the data into the directory.
+In the end we could run the complete analysis by using the <code>CMD</code> command. The difference between <code>RUN</code> and <code>CMD</code>  is the following.
+<code>RUN</code> executes commands inside the docker images. These commands get run once during the build phase and are written into a new layer of the docker image.
+<code>CMD</code> runs a command once the container starts.
+There are additional commands available for the Dockerfile like <code>ENV</code> etc. But in this example those commands are sufficient.</p>
+
+<p>To actually start Docker, we need to start the docker daemon using <em>systemctl</em></p>
+
+<pre><code class="language-bash">sudo systemctl start docker
+</code></pre>
+
+<p>Otherwise the user can be added to the docker group by using <em>usermod</em>. In this case the user does not need to be in the <em>sudo</em> group.</p>
+
+<pre><code class="language-bash">usermod -aG docker username
+</code></pre>
+
+<p>After we finished the dockerfile, we need to build to the image.</p>
+
+<pre><code class="language-bash">docker build -t name_image .
+</code></pre>
+
+<p>With <em>docker build</em> we can create an image from a dockerfile. The option <em>-t</em>  specifies the tag, or name of the image. In the end we need to give the path, where the dockerfile resides. As we stay in the current directory, we can just use <em>.</em></p>
+
+<p>To see all available docker images use <em>docker image ls</em></p>
+
+<pre><code class="language-bash">docker image ls
+</code></pre>
+
+<p>To finally start the docker image, we run the following command:</p>
+
+<pre><code class="language-bash">docker run -e USER=user PASSWORD=password name_image -p 8787:8787 image_name
+</code></pre>
+
+<p>The option <em>-e</em> sets the environment variables. For the Rocker image this is the password and the username. <em>-p</em> sets the port, from which the RStudio Server is available.</p>
+
+<p>The results in this container are not persistent and are deleted once the container stops running. To acces the results outside the docker container from the host, we create a folder which is accesible by the host and the container. The option <em>-v</em> creates a volume which can be used inside the container and from the host.</p>
+
+<pre><code class="language-bash">docker run -v ~/Docker_dateien/:/home/rstudio/analysis -e PASSWORD=rstudioaccess -p 8787:8787 image_name
+</code></pre>
+
+<p>In this example the folder Docker/dateien on the host is used for sharing the data. Inside the container the folder /home/rstudio/analysis can be used for copying results from the analysis to be later used outside the container.</p>
+
+<p>To acces this R-Studio server, we can type in the browser localhost:8787. A login screen is presented and we log in using the username rstudio and the password we created before, in this case rstudioaccess. An R-Studio session is presented with all the data we copied before. We can create a R-Script and run it in the container. Once we are finished with the analysis, we copy the scripts to the shared folder, which is ~/Docker_dateien inside the R-Studio container.</p>
+
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://thomasfriesen.github.io/posts/image-segmentation/" data-toggle="tooltip" data-placement="top" title="Image segmentation using Python">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/https://github.com/thomasfriesen" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Thomas
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://thomasfriesen.github.io/">Statistics, R, Bayes and other stuff</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.58.3</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://thomasfriesen.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://thomasfriesen.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

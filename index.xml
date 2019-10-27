@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statistics, R, Bayes and other stuff</title>
+    <link>https://thomasfriesen.github.io/</link>
+    <description>Recent content on Statistics, R, Bayes and other stuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 26 Sep 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://thomasfriesen.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker and R: Rocker</title>
+      <link>https://thomasfriesen.github.io/posts/19-10-2019-docker-for-rrocker/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/19-10-2019-docker-for-rrocker/</guid>
+      <description>Docker is a popular tool for building and deploying an application by using containers. Docker is designed to deliver an application and its dependencies in a package. Compared to other virtualization software, docker containers are lighweight and fast to deploy. The reason for this is Docker relies on the kernel of the host instead of virtualizing the whole kernel.
+Docker is used in data science application because it allows to package the application and all its dependencies in one container.</description>
+    </item>
+    
+    <item>
+      <title>Image segmentation using Python</title>
+      <link>https://thomasfriesen.github.io/posts/image-segmentation/</link>
+      <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/image-segmentation/</guid>
+      <description>&lt;p&gt;Image segmentation is one of the hotspots in image processing and computer vision and is also very important in image recognition. One of the most known and powerful approaches in image segmentation is the convolutional neural network (CNN).
+There are different approaches for image segmentation.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>A closer look at the german federal election II</title>
+      <link>https://thomasfriesen.github.io/posts/2019-09-26-a-closer-look-at-the-german-federal-election-ii/</link>
+      <pubDate>Mon, 01 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/2019-09-26-a-closer-look-at-the-german-federal-election-ii/</guid>
+      <description>In the last example we took a look at the german constituencies and visualized those regions using a PCA. In this example we will cluster the constituencies using the principal component scores and try to find an ideal cluster solution. For clustering we will use hierarchical clustering. We first load the necessary packages for dealing with spatial data. The data used here has been prepared before the analysis by adding the principal component scores and by tidying the data up.</description>
+    </item>
+    
+    <item>
+      <title>A closer look at the german federal election I</title>
+      <link>https://thomasfriesen.github.io/posts/2019-01-24-a-closer-look-at-the-german-federal-election-i/</link>
+      <pubDate>Thu, 24 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/2019-01-24-a-closer-look-at-the-german-federal-election-i/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Predicting House prices in Taiwan: A Bayesian approach</title>
+      <link>https://thomasfriesen.github.io/posts/2019-01-22-predicting-house-prices-in-taiwan-a-bayesian-approach/</link>
+      <pubDate>Tue, 22 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/2019-01-22-predicting-house-prices-in-taiwan-a-bayesian-approach/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Imbalanced Classification</title>
+      <link>https://thomasfriesen.github.io/posts/unbalanced-classification/</link>
+      <pubDate>Sun, 20 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/unbalanced-classification/</guid>
+      <description>Classification is a supervised task for categorizing observation given a set of variables. The category for each observation is given before. This is similiar to regression but the response variable is now discrete. The most used case is a binary classification but a multi-case classification is possible too. A possible problem in classification is the case of an imbalanced dataset, where the number of cases are not equally distributed. To counter this problem a number of sampling methods can be used.</description>
+    </item>
+    
+    <item>
+      <title>Landsat Classification using K-means</title>
+      <link>https://thomasfriesen.github.io/posts/2019-01-28-landsat-classification-using-k-means/</link>
+      <pubDate>Fri, 18 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/posts/2019-01-28-landsat-classification-using-k-means/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>About me</title>
+      <link>https://thomasfriesen.github.io/page/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://thomasfriesen.github.io/page/about/</guid>
+      <description>I am a statistics student and interested in everything related to Bayes, Machine Learning and of course statistics itself. R is my main programming language but I also have good experience with python.</description>
+    </item>
+    
+  </channel>
+</rss>
